@@ -13,7 +13,7 @@ local header = {
 		}},
     },
 	filepath = {
-        {name = "Background", path = "BG/*.jpg", def = "default.jpg"},
+        {name = "Background", path = "BG/*", def = "default.jpg"},
     },
 	offset = {}
 }
@@ -42,10 +42,16 @@ local function main()
         {id = "test", path = "img/test.png"},
         {id = "src-lampbar", path = "img/lamp.png"},
         {id = "src-barcolors", path = "img/barcolors.png"},
-        {id = "src-bg", path = "BG/*.jpg"},
+        {id = "src-bg", path = "BG/*"},
         {id = "src-lamps", path = "img/lamps.png"},
         {id = "src-lampgraph", path = "img/lampgraph.png"},
-        {id = "src-lane-option", path = "img/option/lane.png"}
+        {id = "src-lane-option", path = "img/option/lane.png"},
+        {id = "src-gauge-option", path = "img/option/gauge.png"},
+        {id = "src-hsfix-option", path = "img/option/hsfix.png"},
+        {id = "src-generic-option", path = "img/option/generic.png"},
+        {id = "src-bga-option", path = "img/option/bga.png"},
+        {id = "src-gas-option", path = "img/option/gas.png"},
+        {id = "src-assist-option", path = "img/option/assist.png"},
     }
 
     skin.font = {
@@ -126,6 +132,29 @@ local function main()
 
         {id = "option-play-big", font = 1, size = 36, constantText = "PLAY OPTIONS [start]", align = 2},
         {id = "option-play-lane", font = 2, size = 36, constantText = "lane option  ", align = 2},
+        {id = "option-play-gauge", font = 2, size = 36, constantText = "gauge type  ", align = 2},
+        {id = "option-play-hsfix", font = 2, size = 36, constantText = "hi-speed fix  ", align = 2},
+        {id = "option-play-lanecover", font = 2, size = 36, constantText = "lane cover  ", align = 2},
+        {id = "option-play-lift", font = 2, size = 36, constantText = "lift  ", align = 2},
+        {id = "option-play-target", font = 2, size = 36, constantText = "target score  ", align = 2},
+        {id = "option-target", font = 2, size = 36, ref = 3, align = 2},
+
+        {id = "option-adv-big", font = 1, size = 36, constantText = "ADVANCED OPTIONS [start+select]", align = 2},
+        {id = "option-adv-bga", font = 2, size = 36, constantText = "bga  ", align = 2},
+        {id = "option-adv-gas", font = 2, size = 36, constantText = "gauge auto-shift  ", align = 2},
+        {id = "option-adv-autoadj", font = 2, size = 36, constantText = "offset auto-adjust  ", align = 2},
+        {id = "option-adv-scroll", font = 2, size = 36, constantText = "scroll speed  ", align = 2},
+        {id = "option-adv-offset", font = 2, size = 36, constantText = "visual offset  ", align = 2},
+        {id = "option-scroll", font = 2, size = 36, value = function() return main_state.number(313) .. " GN" end, align = 2},
+        {id = "option-offset", font = 2, size = 36, value = function() 
+        offs = main_state.number(12)
+        if offs > 0 then
+            offs = "+‎" .. offs
+        end
+        return offs
+        end, align = 2},
+
+        {id = "option-assist-big", font = 1, size = 36, constantText = "ASSIST OPTIONS [select]", align = 2},
         
     }
 
@@ -168,6 +197,35 @@ local function main()
         {id = "option-lane-9", src = "src-lane-option", y = 36 * 8, w = 300, h = 36},
         {id = "option-lane-10", src = "src-lane-option", y = 36 * 9, w = 300, h = 36},
 
+        {id = "option-gauge-1", src = "src-gauge-option", w = 300, h = 36},
+        {id = "option-gauge-2", src = "src-gauge-option", y = 36, w = 300, h = 36},
+        {id = "option-gauge-3", src = "src-gauge-option", y = 36 * 2, w = 300, h = 36},
+        {id = "option-gauge-4", src = "src-gauge-option", y = 36 * 3, w = 300, h = 36},
+        {id = "option-gauge-5", src = "src-gauge-option", y = 36 * 4, w = 300, h = 36},
+        {id = "option-gauge-6", src = "src-gauge-option", y = 36 * 5, w = 300, h = 36},
+
+        {id = "option-hsfix-1", src = "src-hsfix-option", w = 300, h = 36},
+        {id = "option-hsfix-2", src = "src-hsfix-option", y = 36, w = 300, h = 36},
+        {id = "option-hsfix-3", src = "src-hsfix-option", y = 36 * 2, w = 300, h = 36},
+        {id = "option-hsfix-4", src = "src-hsfix-option", y = 36 * 3, w = 300, h = 36},
+        {id = "option-hsfix-5", src = "src-hsfix-option", y = 36 * 4, w = 300, h = 36},
+
+        {id = "option-generic-1", src = "src-generic-option", w = 300, h = 36},
+        {id = "option-generic-2", src = "src-generic-option", y = 36, w = 300, h = 36},
+
+        {id = "option-bga-1", src = "src-bga-option", w = 300, h = 36},
+        {id = "option-bga-2", src = "src-bga-option", y = 36, w = 300, h = 36},
+        {id = "option-bga-3", src = "src-bga-option", y = 36 * 2, w = 300, h = 36},
+
+        {id = "option-gas-1", src = "src-gas-option", w = 400, h = 36},
+        {id = "option-gas-2", src = "src-gas-option", y = 36, w = 400, h = 36},
+        {id = "option-gas-3", src = "src-gas-option", y = 36 * 2, w = 400, h = 36},
+        {id = "option-gas-4", src = "src-gas-option", y = 36 * 3, w = 400, h = 36},
+        {id = "option-gas-5", src = "src-gas-option", y = 36 * 4, w = 400, h = 36},
+
+        {id = "option-assist-1", src = "src-assist-option", w = 300, h = 36},
+        {id = "option-assist-2", src = "src-assist-option", y = 36, w = 300, h = 36},
+
     }
 
 
@@ -178,7 +236,50 @@ local function main()
         }},
         {id = "option-lane", ref = 42, act = 42, images = {
             "option-lane-1", "option-lane-2", "option-lane-3", "option-lane-4", "option-lane-5", "option-lane-6", "option-lane-7", "option-lane-8", "option-lane-9", "option-lane-10"
-        }}
+        }},
+        {id = "option-gauge", ref = 40, act = 40, images = {
+            "option-gauge-1", "option-gauge-2", "option-gauge-3", "option-gauge-4", "option-gauge-5", "option-gauge-6"
+        }},
+        {id = "option-hsfix", ref = 55, act = 55, images = {
+            "option-hsfix-1", "option-hsfix-2", "option-hsfix-3", "option-hsfix-4", "option-hsfix-5"
+        }},
+        {id = "option-lanecover", ref = 330, act = 330, images = {
+            "option-generic-1", "option-generic-2"
+        }},
+        {id = "option-lift", ref = 331, act = 331, images = {
+            "option-generic-1", "option-generic-2"
+        }},
+        {id = "option-autoadj", ref = 342, act = 342, images = {
+            "option-generic-2", "option-generic-1"
+        }},
+        {id = "option-bga", ref = 72, act = 72, images = {
+            "option-bga-3", "option-bga-2", "option-bga-1"
+        }},
+        {id = "option-gas", ref = 78, act = 78, images = {
+            "option-gas-1", "option-gas-2", "option-gas-3", "option-gas-4", "option-gas-5"
+        }},
+        {id = "option-assist1", ref = 301, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist2", ref = 302, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist3", ref = 303, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist4", ref = 304, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist5", ref = 305, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist6", ref = 306, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+        {id = "option-assist7", ref = 307, images = {
+            "option-assist-1", "option-assist-2"
+        }},
+
     }
 
     --songwheel start
@@ -274,7 +375,7 @@ local function main()
 
     local op_side_x = 2550
     
-    local op_play_y = 1200
+    local op_play_y = 1300
 
     skin.destination = {
         {id = "bg", dst = {{w = 2560, h = 1440}}},
@@ -473,6 +574,134 @@ local function main()
         }},
         {id = "option-lane", dst = {
             {x = op_side_x - 280, y = op_play_y - 86, w = 300, h = 36}
+        }},
+        {id = "option-play-gauge", dst = {
+            {x = op_side_x + 5, y = op_play_y - 136 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-gauge", dst = {
+            {x = op_side_x, y = op_play_y - 136, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-gauge", dst = {
+            {x = op_side_x - 280, y = op_play_y - 172, w = 300, h = 36}
+        }},
+        {id = "option-play-hsfix", dst = {
+            {x = op_side_x + 5, y = op_play_y - 222 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-hsfix", dst = {
+            {x = op_side_x, y = op_play_y - 222, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-hsfix", dst = {
+            {x = op_side_x - 280, y = op_play_y - 258, w = 300, h = 36}
+        }},
+        {id = "option-play-lanecover", dst = {
+            {x = op_side_x + 5, y = op_play_y - 308 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-lanecover", dst = {
+            {x = op_side_x, y = op_play_y - 308, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-lanecover", dst = {
+            {x = op_side_x - 280, y = op_play_y - 344, w = 300, h = 36}
+        }},
+        {id = "option-play-lift", dst = {
+            {x = op_side_x + 5, y = op_play_y - 394 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-lift", dst = {
+            {x = op_side_x, y = op_play_y - 394, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-lift", dst = {
+            {x = op_side_x - 280, y = op_play_y - 430, w = 300, h = 36}
+        }},
+        {id = "option-play-target", dst = {
+            {x = op_side_x + 5, y = op_play_y - 480 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-target", dst = {
+            {x = op_side_x, y = op_play_y - 480, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-target", dst = {
+            {x = op_side_x, y = op_play_y - 520, w = 300, h = 36}
+        }},
+
+        {id = "option-adv-big", dst = {
+            {x = op_side_x + 5, y = op_play_y - 620 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-big", dst = {
+            {x = op_side_x, y = op_play_y - 620, w = 400, h = 36}
+        }},
+        {id = "option-adv-bga", dst = {
+            {x = op_side_x + 5, y = op_play_y - 670 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-bga", dst = {
+            {x = op_side_x, y = op_play_y - 670, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-bga", dst = {
+            {x = op_side_x - 280, y = op_play_y - 706, w = 300, h = 36}
+        }},
+        {id = "option-adv-gas", dst = {
+            {x = op_side_x + 5, y = op_play_y - 756 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-gas", dst = {
+            {x = op_side_x, y = op_play_y - 756, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-gas", dst = {
+            {x = op_side_x - 380, y = op_play_y - 792, w = 400, h = 36}
+        }},
+        {id = "option-adv-autoadj", dst = {
+            {x = op_side_x + 5, y = op_play_y - 842 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-autoadj", dst = {
+            {x = op_side_x, y = op_play_y - 842, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-autoadj", dst = {
+            {x = op_side_x - 280, y = op_play_y - 878, w = 300, h = 36}
+        }},
+        {id = "option-adv-scroll", dst = {
+            {x = op_side_x + 5, y = op_play_y - 928 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-scroll", dst = {
+            {x = op_side_x, y = op_play_y - 928, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-scroll", dst = {
+            {x = op_side_x, y = op_play_y - 964, w = 300, h = 36}
+        }},
+        {id = "option-adv-offset", dst = {
+            {x = op_side_x + 5, y = op_play_y - 1014 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-adv-offset", dst = {
+            {x = op_side_x, y = op_play_y - 1014, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-offset", draw = function() return main_state.number(12) > 0 end, dst = {
+            {x = op_side_x, y = op_play_y - 1050, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-offset", draw = function() return main_state.number(12) <= 0 end, dst = {
+            {x = op_side_x, y = op_play_y - 1050, w = 300, h = 36, g = 0, r = 0}
+        }},
+
+        {id = "option-assist-big", dst = {
+            {x = op_side_x + 5, y = op_play_y - 1150 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-assist-big", dst = {
+            {x = op_side_x, y = op_play_y - 1150, w = 400, h = 36}
+        }},
+        {id = "option-assist1", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist2", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist3", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist4", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist5", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist6", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+        {id = "option-assist7", dst = {
+            {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
         
     }
