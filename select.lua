@@ -26,15 +26,30 @@ local function main()
 		skin[k] = v
     end
 
+    local function clampNumba(num, leadingZero)
+		numba = 0
+		if main_state.number(num) < 0 then
+			numba = 0
+		else numba = main_state.number(num)
+        end
+        if numba < 10 and leadingZero then
+            numba = "0" .. "‎" .. numba
+		end
+		return numba
+	end
+
     skin.source = {
         {id = "test", path = "img/test.png"},
         {id = "src-lampbar", path = "img/lamp.png"},
         {id = "src-barcolors", path = "img/barcolors.png"},
-        {id = "src-bg", path = "BG/*.jpg"}
+        {id = "src-bg", path = "BG/*.jpg"},
+        {id = "src-lamps", path = "img/lamps.png"},
+        {id = "src-lampgraph", path = "img/lampgraph.png"},
+        {id = "src-lane-option", path = "img/option/lane.png"}
     }
 
     skin.font = {
-        {id = 0, path = "Fonts/barfont.fnt"},
+        {id = 0, path = "Fonts/NotoSerif.fnt"},
         {id = 1, path = "Fonts/mgenplus-1c-black.ttf"},
         {id = 2, path = "Fonts/mgenplus-1c-medium.ttf"}
     }
@@ -42,7 +57,12 @@ local function main()
     skin.text = {
         {id = "bartext", font = 0, size = 36, overflow = 1, align = 1},
         {id = "directory", font = 1, size = 150, align = 1, overflow = 1, value = function()
-            folder = main_state.text(1000):match("> (.*)> "):match'^(.*%S)%s*$'
+            -- had no real way of cleaning this up so I made beatoraja shut the fuck up instead
+            if pcall(function() return main_state.text(1000):match("> (.*)> "):match'^(.*%S)%s*$' end) then
+                folder = main_state.text(1000):match("> (.*)> "):match'^(.*%S)%s*$'
+            else folder = ""
+            end
+            
             
             if folder == nil then
                 folder = ""
@@ -66,6 +86,47 @@ local function main()
             return bpm
             end
         },
+        {id = "search", font = 1, size = 36, ref = 30},
+        {id = "play_text", font = 2, size = 24, constantText = "PLAY", align = 2},
+        {id = "prac_text", font = 2, size = 24, constantText = "PRACTICE", align = 2},
+        {id = "auto_text", font = 2, size = 24, constantText = "AUTOPLAY", align = 2},
+
+        -- {id = "score_ex_text", font = 2, size = 24, constantText = "EX"},
+        {id = "score_rate", font = 2, size = 24, value = function() return clampNumba(102) .. "." .. clampNumba(103, true) .. "%" end, align = 1},
+        {id = "score_bp_text", font = 2, size = 24, constantText = "BP"},
+        {id = "score_bp", font = 2, size = 24, value = function() return main_state.number(76) end, align = 2},
+        {id = "score_cb_text", font = 2, size = 24, constantText = "CB"},
+        {id = "score_cb", font = 2, size = 24, value = function() return main_state.number(425) end, align = 2},
+        {id = "score_gr", font = 2, size = 24, value = function()
+        	local rank = {
+                [0] = "AAA",
+                [1] = "AA",
+                [2] = "A",
+                [3] = "B",
+                [4] = "C",
+                [5] = "D",
+                [6] = "E",
+                [7] = "F"
+            }
+            gradeop = 0
+            if main_state.option(2) or main_state.option(3) then
+            repeat
+                gradeop = gradeop + 1
+            until main_state.option(200+gradeop) or gradeop == 7
+            end
+            if gradeop == 7 and main_state.option(200) then 
+                gradeop = 0
+            end
+            return rank[gradeop]
+        end, align = 1},
+        {id = "button-play-num", font = 2, size = 12, constantText = "[1]"},
+        {id = "button-prac-num", font = 2, size = 12, constantText = "[3]"},
+        {id = "button-auto-num", font = 2, size = 12, constantText = "[5]"},
+        {id = "button-repl-num", font = 2, size = 12, constantText = "[7]"},
+
+        {id = "option-play-big", font = 1, size = 36, constantText = "PLAY OPTIONS [start]", align = 2},
+        {id = "option-play-lane", font = 2, size = 36, constantText = "lane option  ", align = 2},
+        
     }
 
     skin.image = {
@@ -75,17 +136,37 @@ local function main()
         {id = "bar-song",   src = "src-barcolors", w = 1, h = 1},
         {id = "bar-nosong", src = "src-barcolors", x = 2, w = 1, h = 1},
         
-        {id = "lamp-noplay", src = "src-lampbar", x = 0, y = 920, w = 118, h = 1, divx = 2},
-        {id = "lamp-failed", src = "src-lampbar", x = 0, y = 46, w = 118, h = 1, divx = 2, cycle = 33},
-        {id = "lamp-assist", src = "src-lampbar", x = 0, y = 92 + 46, w = 118, h = 1, divx = 2},
-        {id = "lamp-lassist", src = "src-lampbar", x = 0, y = 184 + 46, w = 118, h = 1, divx = 2},
-        {id = "lamp-easy", src = "src-lampbar", x = 0, y = 276 + 46, w = 118, h = 1, divx = 2},
-        {id = "lamp-normal", src = "src-lampbar", x = 0, y = 368 + 46, w = 118, h = 1, divx = 2},
-        {id = "lamp-hard", src = "src-lampbar", x = 0, y = 460 + 46, w = 118, h = 1, divx = 2},
-        {id = "lamp-exhard", src = "src-lampbar", x = 0, y = 552 + 46, w = 118, h = 1, divx = 2, cycle = 133},
-        {id = "lamp-fc", src = "src-lampbar", x = 0, y = 644 + 46, w = 118, h = 1, divx = 2, cycle = 133},
-        {id = "lamp-perfect", src = "src-lampbar", x = 0, y = 736 + 46, w = 118, h = 1, divx = 2, cycle = 133},
-        {id = "lamp-max", src = "src-lampbar", x = 0, y = 828 + 46, w = 118, h = 1, divx = 2, cycle = 133},
+        {id = "lamp-noplay", src = "src-lamps", y = 10, w = 2, h = 1, divx = 2},
+        {id = "lamp-failed", src = "src-lamps", w = 2, h = 1, divx = 2, cycle = 33},
+        {id = "lamp-assist", src = "src-lamps", y = 1, w = 2, h = 1, divx = 2},
+        {id = "lamp-lassist", src = "src-lamps", y = 2, w = 2, h = 1, divx = 2},
+        {id = "lamp-easy", src = "src-lamps", y = 3, w = 2, h = 1, divx = 2},
+        {id = "lamp-normal", src = "src-lamps", y = 4, w = 2, h = 1, divx = 2},
+        {id = "lamp-hard", src = "src-lamps", y = 5, w = 2, h = 1, divx = 2},
+        {id = "lamp-exhard", src = "src-lamps", y = 6, w = 80, h = 1, divx = 80, cycle = 1333},
+        {id = "lamp-fc", src = "src-lamps", y = 7, w = 80, h = 1, divx = 80, cycle = 1333},
+        {id = "lamp-perfect", src = "src-lamps", y = 8, w = 80, h = 1, divx = 80, cycle = 1333},
+        {id = "lamp-max", src = "src-lamps", y = 9, w = 80, h = 1, divx = 80, cycle = 1333},
+
+        {id = "button-play",    src = "src-barcolors", x = 3, w = 1, h = 1, act = 15},
+        {id = "button-prac",    src = "src-barcolors", x = 3, w = 1, h = 1, act = 315},
+        {id = "button-auto",    src = "src-barcolors", x = 3, w = 1, h = 1, act = 16},
+
+        {id = "button-repl-1",  src = "src-barcolors", x = 3, w = 1, h = 1, act = 19},
+        {id = "button-repl-2",  src = "src-barcolors", x = 3, w = 1, h = 1, act = 316},
+        {id = "button-repl-3",  src = "src-barcolors", x = 3, w = 1, h = 1, act = 317},
+        {id = "button-repl-4",  src = "src-barcolors", x = 3, w = 1, h = 1, act = 318},
+
+        {id = "option-lane-1", src = "src-lane-option", w = 300, h = 36},
+        {id = "option-lane-2", src = "src-lane-option", y = 36, w = 300, h = 36},
+        {id = "option-lane-3", src = "src-lane-option", y = 36 * 2, w = 300, h = 36},
+        {id = "option-lane-4", src = "src-lane-option", y = 36 * 3, w = 300, h = 36},
+        {id = "option-lane-5", src = "src-lane-option", y = 36 * 4, w = 300, h = 36},
+        {id = "option-lane-6", src = "src-lane-option", y = 36 * 5, w = 300, h = 36},
+        {id = "option-lane-7", src = "src-lane-option", y = 36 * 6, w = 300, h = 36},
+        {id = "option-lane-8", src = "src-lane-option", y = 36 * 7, w = 300, h = 36},
+        {id = "option-lane-9", src = "src-lane-option", y = 36 * 8, w = 300, h = 36},
+        {id = "option-lane-10", src = "src-lane-option", y = 36 * 9, w = 300, h = 36},
 
     }
 
@@ -95,6 +176,9 @@ local function main()
         {id = "bars", images = {
             "bar-song", "bar-folder", "bar-folder", "bar-folder", "bar-folder", "bar-folder", "bar-folder", "bar-nosong"
         }},
+        {id = "option-lane", ref = 42, act = 42, images = {
+            "option-lane-1", "option-lane-2", "option-lane-3", "option-lane-4", "option-lane-5", "option-lane-6", "option-lane-7", "option-lane-8", "option-lane-9", "option-lane-10"
+        }}
     }
 
     --songwheel start
@@ -113,9 +197,9 @@ local function main()
 		local list_w		= 850
 		local list_h		= 1050 / bar_num
 		
-		local lamp_w		= 20
+		local lamp_w		= list_w - 8
 		local lamp_h		= list_h - 8
-		local lamp_x		= 0
+		local lamp_x		= 4
 		local lamp_y		= 4
 		
 		local bar_roop		 = 30
@@ -132,7 +216,7 @@ local function main()
                 "lamp-noplay", "lamp-failed", "lamp-assist", "lamp-lassist", "lamp-easy", "lamp-normal", "lamp-hard", "lamp-exhard", "lamp-fc", "lamp-perfect", "lamp-max"
 			}
 			for i, v in ipairs(lamp_category) do
-				table.insert(t_lamp,		{id = v, blend = 2, dst = {{x = lamp_x, y = lamp_y, w = lamp_w, h = lamp_h}}})
+				table.insert(t_lamp,		{id = v, blend = 2, dst = {{x = lamp_x, y = lamp_y, w = lamp_w, h = lamp_h, a = 63}}})
 				table.insert(t_playerlamp,	{id = v .. "_p", dst = {{x = lamp_x, y = lamp_y, w = lamp_w, h = lamp_h}}})
 				table.insert(t_rivallamp,	{id = v .. "_r", dst = {{x = lamp_x, y = lamp_y, w = lamp_w, h = lamp_h}}})
 			end
@@ -142,7 +226,7 @@ local function main()
 	skin.songlist = {
 		id = "songlist",
 		center = 7,
-		clickable = {3,4,5,6,7,8,9,10,11,12,13},
+		clickable = {3,4,5,6,7,8,9,10,11,12},
 		listoff = t_listoff,
 		liston  = t_liston,
 		text = {
@@ -180,8 +264,17 @@ local function main()
 			{id = "default_songlist2_label_cn",		dst = {{x = -42, y = 12, w = 40, h = 30}}},
 			{id = "default_songlist2_label_hcn",	dst = {{x = -42, y = 12, w = 40, h = 30}}},
 		},
-		graph = {id = "graph-lamp", dst = {{x = 50, y = 2, w = 600, h = 6}}}
+		graph = {id = "graph-lamp", dst = {{w = 842, h = 67, x = 4, y = 4}}}
 	}
+
+    skin.graph = {
+        {id = "scorebar", src = "src-barcolors", x = 5, w = 1, h = 1, type = 147, angle = 0},
+        {id = "graph-lamp", src = "src-lampgraph", w = 11, h = 30, divx = 11, divy = 2, cycle = 100, type = -1},
+    }
+
+    local op_side_x = 2550
+    
+    local op_play_y = 1200
 
     skin.destination = {
         {id = "bg", dst = {{w = 2560, h = 1440}}},
@@ -190,6 +283,38 @@ local function main()
             {x = 0, y = 0, w = 600, h = 335}
         }}, ]]
         {id = "songlist"},
+        -- song score shit
+        {id = -111, draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855, y = 545, w = 850, h = 30, r = 28, g = 56, b = 77}
+        }},
+        {id = "scorebar", draw = function() return main_state.option(2) and main_state.number(71) >= 0 end, dst = {
+            {x = 855, y = 550, w = 850, h = 20}
+        }},
+--[[         {id = "score_ex_text", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170, y = 545, w = 85, h = 24, r = 128, g = 128, b = 128}
+        }}, ]]
+        {id = "score_rate", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170, y = 545, w = 85, h = 24}
+        }},
+        {id = "score_bp_text", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170 * 2, y = 545, w = 85, h = 24, r = 128, g = 128, b = 128}
+        }},
+        {id = "score_bp", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170 * 2, y = 545, w = 85, h = 24}
+        }},
+        {id = "score_cb_text", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170 * 3, y = 545, w = 85, h = 24, r = 128, g = 128, b = 128}
+        }},
+        {id = "score_cb", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170 * 3, y = 545, w = 85, h = 24}
+        }},
+        {id = "score_gr", draw = function() return (main_state.option(3) or main_state.option(2)) and main_state.number(71) >= 0 end, dst = {
+            {x = 855 + 170 * 4, y = 545, w = 85, h = 24}
+        }},
+
+
+        
+
         --top bar 
         {id = -100, filter = 2, dst = {
             {time = 0, x = 855, y = 1011, w = 850, h = 637, a = 255, acc = 1},
@@ -217,6 +342,108 @@ local function main()
         {id = "directory", dst = {{x = 1283, y = 1225, w = 850, h = 150, r = 0, g = 0, b = 0, a = 127}}},
         {id = "directory", dst = {{x = 1280, y = 1228, w = 850, h = 150}}},
 
+        -- bottom bar
+        {id = -111, dst = {
+            {x = 855, y = -39, w = 850, h = 225, r = 31, g = 31, b = 31}
+        }},
+        {id = -110, dst = {
+            {x = 865, y = 121, w = 830, h = 55}
+        }},
+        {id = "search", dst = {
+            {x = 870, y = 133, w = 830, h = 36}
+        }},
+        {id = -111, dst = {
+            {x = 865, y = 7 + 62, w = 420, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-play", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865, y = 7 + 62, w = 420, h = 40}
+        }},
+        {id = "button-play-num", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865, y = 69 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "play_text", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865 + 419, y = 65, w = 420, h = 24}
+        }},
+        {id = -111, dst = {
+            {x = 865, y = 13, w = 200, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-prac",draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865, y = 13, w = 200, h = 40}
+        }},
+        {id = "button-prac-num", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865, y = 13 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "prac_text", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865 + 199, y = 9, w = 200, h = 24}
+        }},
+        {id = -111, dst = {
+            {x = 865 + 220, y = 13, w = 200, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-auto", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865 + 220, y = 13, w = 200, h = 40}
+        }},
+        {id = "button-auto-num", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865 + 220, y = 13 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "auto_text", draw = function() return main_state.option(2) or main_state.option(3) end, dst = {
+            {x = 865 + 220 + 199, y = 9, w = 200, h = 24}
+        }},
+        {id = -111, dst = {
+            {x = 855 + 800, y = 69, w = 40, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = -111, dst = {
+            {x = 855 + 750, y = 69, w = 40, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = -111, dst = {
+            {x = 855 + 800, y = 19, w = 40, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = -111, dst = {
+            {x = 855 + 750, y = 19, w = 40, h = 40, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-repl-1", op = {197}, dst = {
+            {x = 855 + 750, y = 69, w = 40, h = 40}
+        }},
+        {id = -111, op = {1205}, dst = {
+            {time = 0, x = 855 + 750, y = 69, w = 40, h = 40, g = 0, b = 0, a = 15},
+            {time = 500, a = 127},
+            {time = 1000, a = 15}
+        }},
+        {id = "button-repl-num", op = {1205}, dst = {
+            {x = 855 + 750, y = 69 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-repl-2", op = {1197}, dst = {
+            {x = 855 + 800, y = 69, w = 40, h = 40}
+        }},
+        {id = -111, op = {1206}, dst = {
+            {time = 0, x = 855 + 800, y = 69, w = 40, h = 40, g = 0, b = 0, a = 15},
+            {time = 500, a = 127},
+            {time = 1000, a = 15}
+        }},
+        {id = "button-repl-num", op = {1206}, dst = {
+            {x = 855 + 800, y = 69 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-repl-3", op = {1200}, dst = {
+            {x = 855 + 750, y = 19, w = 40, h = 40}
+        }},
+        {id = -111, op = {1207}, dst = {
+            {time = 0, x = 855 + 750, y = 19, w = 40, h = 40, g = 0, b = 0, a = 15},
+            {time = 500, a = 127},
+            {time = 1000, a = 15}
+        }},
+        {id = "button-repl-num", op = {1207}, dst = {
+            {x = 855 + 750, y = 19 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
+        {id = "button-repl-4", op = {1203}, dst = {
+            {x = 855 + 800, y = 19, w = 40, h = 40}
+        }},
+        {id = -111, op = {1208}, dst = {
+            {time = 0, x = 855 + 800, y = 19, w = 40, h = 40, g = 0, b = 0, a = 15},
+            {time = 500, a = 127},
+            {time = 1000, a = 15}
+        }},
+        {id = "button-repl-num", op = {1208}, dst = {
+            {x = 855 + 800, y = 19 + 25, w = 12, h = 12, r = 15, g = 15, b = 15}
+        }},
         -- song metadata
         {id = "root_directory", dst = {{w = 680, h = 36, x = 1020, y = 1165}}},
         {id = "root_text", dst = {{w = 850, h = 36, x = 1015, y = 1165, r = 127, g = 127, b = 127}}},
@@ -229,6 +456,25 @@ local function main()
 
         {id = "bpm", dst = {{w = 680, h = 36, x = 1020, y = 1015}}},
         {id = "bpm_text", dst = {{w = 850, h = 36, x = 1015, y = 1015, r = 127, g = 127, b = 127}}},
+
+
+
+        {id = "option-play-big", dst = {
+            {x = op_side_x + 5, y = op_play_y - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-big", dst = {
+            {x = op_side_x, y = op_play_y, w = 400, h = 36}
+        }},
+        {id = "option-play-lane", dst = {
+            {x = op_side_x + 5, y = op_play_y - 50 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
+        }},
+        {id = "option-play-lane", dst = {
+            {x = op_side_x, y = op_play_y - 50, w = 400, h = 36, r = 128, g = 128, b = 128}
+        }},
+        {id = "option-lane", dst = {
+            {x = op_side_x - 280, y = op_play_y - 86, w = 300, h = 36}
+        }},
+        
     }
 
   
