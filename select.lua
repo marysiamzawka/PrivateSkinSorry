@@ -38,6 +38,13 @@ local function main()
 		return numba
 	end
 
+    local function optionActiveCheck()
+        play_op = main_state.option(21)
+        assist_op = main_state.option(22)
+        misc_op = main_state.option(23)
+        return play_op and assist_op and misc_op
+    end
+
     skin.source = {
         {id = "test", path = "img/test.png"},
         {id = "src-lampbar", path = "img/lamp.png"},
@@ -52,6 +59,7 @@ local function main()
         {id = "src-bga-option", path = "img/option/bga.png"},
         {id = "src-gas-option", path = "img/option/gas.png"},
         {id = "src-assist-option", path = "img/option/assist.png"},
+        {id = "src-button-highlight", path = "img/button_highlight.png"},
     }
 
     skin.font = {
@@ -145,7 +153,7 @@ local function main()
         {id = "option-adv-autoadj", font = 2, size = 36, constantText = "offset auto-adjust  ", align = 2},
         {id = "option-adv-scroll", font = 2, size = 36, constantText = "scroll speed  ", align = 2},
         {id = "option-adv-offset", font = 2, size = 36, constantText = "visual offset  ", align = 2},
-        {id = "option-scroll", font = 2, size = 36, value = function() return main_state.number(313) .. " GN" end, align = 2},
+        {id = "option-scroll", font = 2, size = 36, value = function() return main_state.number(312) .. " (" .. main_state.number(313) .. " GN)" end, align = 2},
         {id = "option-offset", font = 2, size = 36, value = function() 
         offs = main_state.number(12)
         if offs > 0 then
@@ -155,6 +163,14 @@ local function main()
         end, align = 2},
 
         {id = "option-assist-big", font = 1, size = 36, constantText = "ASSIST OPTIONS [select]", align = 2},
+        {id = "option-play-lane-header", font = 2, size = 36, constantText = "lane option [1/2]", align = 1},
+        {id = "option-play-lane-list", font = 2, size = 36, constantText = "NORMAL\nMIRROR\nRANDOM\nR-RANDOM\nS-RANDOM\nSPIRAL\nH-RANDOM\nALL-SCRATCH\nEX-RANDOM\nEX-S-RANDOM", align = 1},
+        {id = "option-play-gauge-header", font = 2, size = 36, constantText = "gauge type [3/4]", align = 1},
+        {id = "option-play-gauge-list", font = 2, size = 36, constantText = "AS-EASY\nEASY\nGROOVE\nHARD\nEX-HARD\nHAZARD", align = 1},
+        {id = "option-play-hsfix-header", font = 2, size = 36, constantText = "hi-speed fix [5]", align = 1},
+        {id = "option-play-hsfix-list", font = 2, size = 36, constantText = "DISABLED\nSTART BPM\nMAX BPM\nMAIN BPM\nMIN BPM", align = 1},
+        {id = "option-play-target-header", font = 2, size = 36, constantText = "target score [tt]", align = 1},
+        {id = "option-play-target-list", font = 2, size = 36, value = function() return main_state.text(208) .. "\n" .. main_state.text(209) .. "\n" .. main_state.text(3) .. "\n" .. main_state.text(210) .. "\n" .. main_state.text(211) end, align = 1},
         
     }
 
@@ -226,6 +242,9 @@ local function main()
         {id = "option-assist-1", src = "src-assist-option", w = 300, h = 36},
         {id = "option-assist-2", src = "src-assist-option", y = 36, w = 300, h = 36},
 
+        {id = "button-highlight-on", src = "src-button-highlight", w = 1, h = 1},
+        {id = "button-highlight-off", src = "src-button-highlight", x = 1, w = 1, h = 1},
+
     }
 
 
@@ -279,6 +298,57 @@ local function main()
         {id = "option-assist7", ref = 307, images = {
             "option-assist-1", "option-assist-2"
         }},
+
+        {id = "button-lane-1", ref = 42, act = 42, images = {
+            "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-2", ref = 42, images = {
+            "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-3", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-4", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-5", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-6", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-7", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-8", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-lane-9", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", 
+        }},
+        {id = "button-lane-10", ref = 42, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", 
+        }},
+        {id = "button-gauge-1", ref = 40, act = 40, images = {
+            "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-gauge-2", ref = 40, images = {
+            "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-gauge-3", ref = 40, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-gauge-4", ref = 40, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-gauge-5", ref = 40, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-gauge-6", ref = 40, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+
+
 
     }
 
@@ -560,148 +630,255 @@ local function main()
 
 
 
-        {id = "option-play-big", dst = {
+        {id = "option-play-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-big", dst = {
+        {id = "option-play-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y, w = 400, h = 36}
         }},
-        {id = "option-play-lane", dst = {
+        {id = "option-play-lane", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 50 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-lane", dst = {
+        {id = "option-play-lane", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 50, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-lane", dst = {
+        {id = "option-lane", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 86, w = 300, h = 36}
         }},
-        {id = "option-play-gauge", dst = {
+        {id = "option-play-gauge", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 136 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-gauge", dst = {
+        {id = "option-play-gauge", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 136, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-gauge", dst = {
+        {id = "option-gauge", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 172, w = 300, h = 36}
         }},
-        {id = "option-play-hsfix", dst = {
+        {id = "option-play-hsfix", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 222 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-hsfix", dst = {
+        {id = "option-play-hsfix", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 222, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-hsfix", dst = {
+        {id = "option-hsfix", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 258, w = 300, h = 36}
         }},
-        {id = "option-play-lanecover", dst = {
+        {id = "option-play-lanecover", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 308 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-lanecover", dst = {
+        {id = "option-play-lanecover", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 308, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-lanecover", dst = {
+        {id = "option-lanecover", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 344, w = 300, h = 36}
         }},
-        {id = "option-play-lift", dst = {
+        {id = "option-play-lift", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 394 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-lift", dst = {
+        {id = "option-play-lift", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 394, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-lift", dst = {
+        {id = "option-lift", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 430, w = 300, h = 36}
         }},
-        {id = "option-play-target", dst = {
+        {id = "option-play-target", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 480 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-play-target", dst = {
+        {id = "option-play-target", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 480, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-target", dst = {
+        {id = "option-target", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 520, w = 300, h = 36}
         }},
 
-        {id = "option-adv-big", dst = {
+        {id = "option-adv-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 620 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-big", dst = {
+        {id = "option-adv-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 620, w = 400, h = 36}
         }},
-        {id = "option-adv-bga", dst = {
+        {id = "option-adv-bga", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 670 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-bga", dst = {
+        {id = "option-adv-bga", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 670, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-bga", dst = {
+        {id = "option-bga", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 706, w = 300, h = 36}
         }},
-        {id = "option-adv-gas", dst = {
+        {id = "option-adv-gas", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 756 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-gas", dst = {
+        {id = "option-adv-gas", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 756, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-gas", dst = {
+        {id = "option-gas", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 380, y = op_play_y - 792, w = 400, h = 36}
         }},
-        {id = "option-adv-autoadj", dst = {
+        {id = "option-adv-autoadj", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 842 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-autoadj", dst = {
+        {id = "option-adv-autoadj", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 842, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-autoadj", dst = {
+        {id = "option-autoadj", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 878, w = 300, h = 36}
         }},
-        {id = "option-adv-scroll", dst = {
+        {id = "option-adv-scroll", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 928 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-scroll", dst = {
+        {id = "option-adv-scroll", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 928, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-scroll", dst = {
+        {id = "option-scroll", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 964, w = 300, h = 36}
         }},
-        {id = "option-adv-offset", dst = {
+        {id = "option-adv-offset", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 1014 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-adv-offset", dst = {
+        {id = "option-adv-offset", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 1014, w = 400, h = 36, r = 128, g = 128, b = 128}
         }},
-        {id = "option-offset", draw = function() return main_state.number(12) > 0 end, dst = {
+        {id = "option-offset", op = {-21, -22, -23}, draw = function() return main_state.number(12) > 0 and not(main_state.option(21)) and not(main_state.option(22)) and not(main_state.option(23)) end, dst = {
             {x = op_side_x, y = op_play_y - 1050, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-offset", draw = function() return main_state.number(12) <= 0 end, dst = {
+        {id = "option-offset", op = {-21, -22, -23}, draw = function() return main_state.number(12) <= 0 and not(main_state.option(21)) and not(main_state.option(22)) and not(main_state.option(23)) end, dst = {
             {x = op_side_x, y = op_play_y - 1050, w = 300, h = 36, g = 0, r = 0}
         }},
 
-        {id = "option-assist-big", dst = {
+        {id = "option-assist-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x + 5, y = op_play_y - 1150 - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127}
         }},
-        {id = "option-assist-big", dst = {
+        {id = "option-assist-big", op = {-21, -22, -23}, dst = {
             {x = op_side_x, y = op_play_y - 1150, w = 400, h = 36}
         }},
-        {id = "option-assist1", dst = {
+        {id = "option-assist1", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist2", dst = {
+        {id = "option-assist2", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist3", dst = {
+        {id = "option-assist3", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist4", dst = {
+        {id = "option-assist4", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist5", dst = {
+        {id = "option-assist5", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist6", dst = {
+        {id = "option-assist6", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
         }},
-        {id = "option-assist7", dst = {
+        {id = "option-assist7", op = {-21, -22, -23}, dst = {
             {x = op_side_x - 280, y = op_play_y - 1186, w = 300, h = 36, g = 0, b = 0}
+        }},
+
+        -- animations!
+
+        {id = "option-play-big", op = {21}, timer = 21, loop = 100, dst = {
+            {time = 0, x = op_side_x + 5, y = op_play_y - 5, w = 400, h = 36, r = 15, g = 15, b = 15, a = 127, acc = 2},
+            {time = 100, x = op_side_x + 5 - 200}
+        }},
+        {id = "option-play-big", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x, y = op_play_y, w = 400, h = 36, acc = 2},
+            {time = 100, x = op_side_x - 200}
+        }},
+        {id = "button-lane-1", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-2", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-3", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 2, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-4", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 3, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-5", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 4, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-6", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 5, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-7", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 6, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-8", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 7, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-9", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 8, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-lane-10", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 9, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "option-play-lane-header", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 60, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 650}
+        }},
+        {id = "option-play-lane-list", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 100, w = 500, h = 36, acc = 2},
+            {time = 100, x = op_side_x - 650}
+        }},
+        {id = "option-play-gauge-header", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 60, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 200}
+        }},
+        {id = "button-gauge-1", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "button-gauge-2", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "button-gauge-3", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 2, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "button-gauge-4", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 3, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "button-gauge-5", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 4, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "button-gauge-6", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 96 - 53 * 5, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
+        {id = "option-play-gauge-list", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 100, w = 500, h = 36, acc = 2},
+            {time = 100, x = op_side_x - 200}
+        }},
+        {id = "option-play-hsfix-header", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 700, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 650}
+        }},
+        {id = "option-play-hsfix-list", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 740, w = 500, h = 36, acc = 2},
+            {time = 100, x = op_side_x - 650}
+        }},
+        {id = "option-play-target-header", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 700, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 200}
+        }},
+        {id = "option-play-target-list", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 740, w = 500, h = 36, acc = 2},
+            {time = 100, x = op_side_x - 200}
         }},
         
     }
