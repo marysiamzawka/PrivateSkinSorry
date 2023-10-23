@@ -60,6 +60,7 @@ local function main()
         {id = "src-gas-option", path = "img/option/gas.png"},
         {id = "src-assist-option", path = "img/option/assist.png"},
         {id = "src-button-highlight", path = "img/button_highlight.png"},
+        {id = "src-check", path = "img/check.png"}
     }
 
     skin.font = {
@@ -165,9 +166,9 @@ local function main()
         {id = "option-assist-big", font = 1, size = 36, constantText = "ASSIST OPTIONS [select]", align = 2},
         {id = "option-play-lane-header", font = 2, size = 36, constantText = "lane option [1/2]", align = 1},
         {id = "option-play-lane-list", font = 2, size = 36, constantText = "NORMAL\nMIRROR\nRANDOM\nR-RANDOM\nS-RANDOM\nSPIRAL\nH-RANDOM\nALL-SCRATCH\nEX-RANDOM\nEX-S-RANDOM", align = 1},
-        {id = "option-play-gauge-header", font = 2, size = 36, constantText = "gauge type [3/4]", align = 1},
+        {id = "option-play-gauge-header", font = 2, size = 36, constantText = "gauge type [3]", align = 1},
         {id = "option-play-gauge-list", font = 2, size = 36, constantText = "AS-EASY\nEASY\nGROOVE\nHARD\nEX-HARD\nHAZARD", align = 1},
-        {id = "option-play-hsfix-header", font = 2, size = 36, constantText = "hi-speed fix [5]", align = 1},
+        {id = "option-play-hsfix-header", font = 2, size = 36, constantText = "hi-speed fix [4]", align = 1},
         {id = "option-play-hsfix-list", font = 2, size = 36, constantText = "DISABLED\nSTART BPM\nMAX BPM\nMAIN BPM\nMIN BPM", align = 1},
         {id = "option-play-target-header", font = 2, size = 36, constantText = "target score [tt]", align = 1},
         {id = "option-play-target-list", font = 2, size = 36, value = function() return main_state.text(208) .. "\n" .. main_state.text(209) .. "\n" .. main_state.text(3) .. "\n" .. main_state.text(210) .. "\n" .. main_state.text(211) end, align = 1},
@@ -244,6 +245,9 @@ local function main()
 
         {id = "button-highlight-on", src = "src-button-highlight", w = 1, h = 1},
         {id = "button-highlight-off", src = "src-button-highlight", x = 1, w = 1, h = 1},
+
+        {id = "button-check-off", src = "src-check", w = 40, h = 40},
+        {id = "button-check-on", src = "src-check", x = 40, w = 40, h = 40},
 
     }
 
@@ -346,6 +350,27 @@ local function main()
         }},
         {id = "button-gauge-6", ref = 40, images = {
             "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-hsfix-1", ref = 55, act = 55, images = {
+            "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-hsfix-2", ref = 55, images = {
+            "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-hsfix-3", ref = 55, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-hsfix-4", ref = 55, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-hsfix-5", ref = 55, images = {
+            "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-on", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", "button-highlight-off", 
+        }},
+        {id = "button-check-lanecover", ref = 330, act = 330, images = {
+            "button-check-off", "button-check-on"
+        }},
+        {id = "button-check-lift", ref = 331, act = 331, images = {
+            "button-check-off", "button-check-on"
         }},
 
 
@@ -868,6 +893,26 @@ local function main()
             {x = op_side_x + 1000, y = op_play_y - 700, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
             {time = 100, x = op_side_x - 650}
         }},
+        {id = "button-hsfix-1", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-hsfix-2", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736 - 53, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-hsfix-3", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736 - 53 * 2, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-hsfix-4", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736 - 53 * 3, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
+        {id = "button-hsfix-5", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736 - 53 * 4, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 800}
+        }},
         {id = "option-play-hsfix-list", op = {21}, timer = 21, loop = 100, dst = {
             {x = op_side_x + 1000, y = op_play_y - 740, w = 500, h = 36, acc = 2},
             {time = 100, x = op_side_x - 650}
@@ -876,9 +921,29 @@ local function main()
             {x = op_side_x + 1000, y = op_play_y - 700, w = 500, h = 36, acc = 2, r = 128, g = 128, b = 128},
             {time = 100, x = op_side_x - 200}
         }},
+        {id = -111, op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 736 - 53 * 2, w = 300, h = 40, acc = 2, a = 63},
+            {time = 100, x = op_side_x - 350}
+        }},
         {id = "option-play-target-list", op = {21}, timer = 21, loop = 100, dst = {
             {x = op_side_x + 1000, y = op_play_y - 740, w = 500, h = 36, acc = 2},
             {time = 100, x = op_side_x - 200}
+        }},
+        {id = "option-play-lanecover", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 1100, w = 400, h = 36, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 520}
+        }},
+        {id = "button-check-lanecover", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 1100 + 2, w = 40, h = 40},
+            {time = 100, x = op_side_x - 760}
+        }},
+        {id = "option-play-lift", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 1100, w = 400, h = 36, r = 128, g = 128, b = 128},
+            {time = 100, x = op_side_x - 120}
+        }},
+        {id = "button-check-lift", op = {21}, timer = 21, loop = 100, dst = {
+            {x = op_side_x + 1000, y = op_play_y - 1100 + 2, w = 40, h = 40},
+            {time = 100, x = op_side_x - 250}
         }},
         
     }
